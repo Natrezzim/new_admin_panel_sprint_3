@@ -1,0 +1,54 @@
+services:
+
+  service:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    command: "python app/manage.py runserver 0.0.0.0:8000"
+    expose:
+      - "8000"
+    volumes:
+      - static_volume:/usr/src/app/static
+    env_file:
+      - ./app/config/.env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./app/sqlscript/movies_schema.sql:/docker-entrypoint-initdb.d/movies_schema.sql
+    env_file:
+      - ./app/config/.env
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: ./Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - static_volume:/home/app/static
+    depends_on:
+      - service
+
+  es:
+    image: elasticsearch:7.7.0
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
+volumes:
+  postgres_data:
+  static_volume:
+  esdata:
