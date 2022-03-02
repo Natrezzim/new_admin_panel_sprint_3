@@ -11,7 +11,7 @@ class Person(BaseModel):
 
 class FilmWork(BaseModel):
     id: uuid.UUID
-    imdb_rating: float
+    imdb_rating: Optional[float]
     genre: str
     title: str
     description: Optional[str]

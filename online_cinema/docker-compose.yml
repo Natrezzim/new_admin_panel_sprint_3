@@ -5,6 +5,7 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     command: "python app/manage.py runserver 0.0.0.0:8000"
+    # в Dockerfile запускается пром версия с gunicorn это команда специально для отладки
     expose:
       - "8000"
     volumes:
@@ -47,6 +48,14 @@ services:
       - esdata:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
+  esloader:
+    build:
+      context: ./postgres_to_elastic
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
+      - es
+      - service
 
 volumes:
   postgres_data:

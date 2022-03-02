@@ -19,7 +19,5 @@ restart:
 	docker-compose -f docker-compose.yml up -d
 first_start: build_up
 	docker exec -it online_cinema-service-1 sh /usr/src/app/first_start.sh
-	docker exec -it online_cinema-service-1 sh /usr/src/app/create_elastic_schema.sh
-start_extract:
-	docker exec -it online_cinema-service-1 python /usr/src/app/postgres_to_elastic/main.py
+	docker exec -it online_cinema-esloader-1 sh /usr/src/create_elastic_schema.sh
 

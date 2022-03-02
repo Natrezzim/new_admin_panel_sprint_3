@@ -10,11 +10,6 @@
 - Собирает статику
 - Создает индекс movies в Elasticsearch
 
-**make start_extract:**
-- Загружает данные из Postgresql в Elasticsearch
-
 Все комманды make  
 
 **make help**
-
->Очень крутая штука Makefile!!! Спасибо за подсказку!
